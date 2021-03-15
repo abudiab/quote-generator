@@ -5,48 +5,47 @@ const twitterBtn = document.getElementById("twitter");
 const newQuoteBtn = document.getElementById("new-quote");
 const loader = document.getElementById("loader");
 
-// Show loading
-const loading = () => {
+// Show loading spinner
+const showLoadingSpinner = () => {
   loader.hidden = false;
   quoteContainer.hidden = true;
 };
 
-// Hide loading
-const complete = () => {
+// Hide loading spinner
+const removeLoadingSpinner = () => {
   if (!loader.hidden) {
     quoteContainer.hidden = false;
     loader.hidden = true;
   }
 };
 
-// Get quote from API
+// Get quotes from API
 const getQuote = async () => {
   // Show loader before doing anything.
-  loading();
-  const proxyUrl = "https://cors-anywhere.herokuapp.com/"; //this is proxy api, it's for development purposes only so use your own
-  const apiUrl = "http://api.forismatic.com/api/1.0/";
-  const queryString = "?method=getQuote&lang=en&format=json";
-  const requestUrl = apiUrl + queryString;
+  showLoadingSpinner();
+  // const proxyUrl = "https://cors-anywhere.herokuapp.com/"; //this is proxy api, it's for development purposes only
+  const apiUrl = "https://type.fit/api/quotes";
   try {
     // we will use the proxy api to call the api we want to bypass the cors plicy error
-    const response = await fetch(proxyUrl + requestUrl);
+    const response = await fetch(apiUrl);
     const data = await response.json();
-    // console.log(data);
+    const apiQuotes = await data;
+    const quote = await apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
     // If author is blank, add 'Unknown'
-    if (data.quoteAuthor === "") {
+    if (!quote.author) {
       authorName.innerText = "Unknown";
     } else {
-      authorName.innerText = data.quoteAuthor;
+      authorName.innerText = quote.author;
     }
     // Reduce font size for long quotes
-    if (data.quoteText.length > 120) {
+    if (quote.text.length > 120) {
       quoteText.classList.add("long-quote");
     } else {
       quoteText.classList.remove("long-quote");
     }
-    quoteText.innerText = data.quoteText;
+    quoteText.innerText = quote.text;
     // Stop loader, show quote
-    complete();
+    removeLoadingSpinner();
   } catch (error) {
     // getQuote(); //in case an error happens, we want to try and fetch another quote
     console.log("Opsy dops, something went wrong..", error);
