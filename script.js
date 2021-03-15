@@ -15,10 +15,21 @@ const getQuote = async () => {
     const response = await fetch(proxyUrl + requestUrl);
     const data = await response.json();
     // console.log(data);
-    authorName.innerText = data.quoteAuthor;
+    // If author is blank, add 'Unknown'
+    if (data.quoteAuthor === "") {
+      authorName.innerText = "Unknown";
+    } else {
+      authorName.innerText = data.quoteAuthor;
+    }
+    // Reduce font size for long quotes
+    if (data.quoteText.length > 120) {
+      quoteText.classList.add("long-quote");
+    } else {
+      quoteText.classList.remove("long-quote");
+    }
     quoteText.innerText = data.quoteText;
   } catch (error) {
-    getQuote(); //in case an error happens, we want to try and fetch another quote
+    // getQuote(); //in case an error happens, we want to try and fetch another quote
     console.log("Opsy dops, something went wrong..", error);
   }
 };
