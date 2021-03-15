@@ -6,6 +6,7 @@
   --secondary-color: #ffffff;
   --bg-color: #ffffff;
   --bg2-color: #333;
+  --loader-color: #f3f3f3;
 }
 
 html {
@@ -88,6 +89,24 @@ button:active {
 
 .twitter-button i {
   font-size: 1.5rem;
+}
+
+.loader {
+  border: 16px solid var(--loader-color);
+  border-top: 16px solid var(--bg2-color);
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Media Query: Tablet or smaller */
